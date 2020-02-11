@@ -1,6 +1,7 @@
 package guru.spring.course.recipe.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-11
@@ -23,6 +24,9 @@ public class Recipe {
     //todo add
 //    private Difficulty difficulty;
     //large object powyżej 256 znaków tutaj się przyda do zapisnia zdjęcia
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
+
     @Lob
     private Byte[] image;
 
