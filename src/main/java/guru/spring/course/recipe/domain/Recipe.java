@@ -21,8 +21,10 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    //todo add
-//    private Difficulty difficulty;
+
+    //te typ domyślny to ordinal i on wtedy numeruje ENUMY jeśli jakiś dodamy to ich numery się zmienią i baza się posypie a string to string i poprzez equals można je porównać
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
     //large object powyżej 256 znaków tutaj się przyda do zapisnia zdjęcia
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
@@ -97,6 +99,22 @@ public class Recipe {
         this.directions = directions;
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public Byte[] getImage() {
         return image;
     }
@@ -112,4 +130,6 @@ public class Recipe {
     public void setNotes(Notes notes) {
         this.notes = notes;
     }
+
+
 }
