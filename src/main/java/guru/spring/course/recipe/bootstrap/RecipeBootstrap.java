@@ -4,9 +4,11 @@ import guru.spring.course.recipe.domain.*;
 import guru.spring.course.recipe.repositories.CategoryRepository;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.Optional;
  * @author Łukasz Staniszewski on 2020-02-13
  * @project recipe
  */
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -31,8 +34,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional // to sprawi że dana metoda będzie działać i wywoływać obikety w ramach jednej transakcji. I nie dojdzie do sytuacji że w jednej transakcji zapisujemy dane a w innej chemy je pobrać i tam ich nie ma
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Loading bootstrap data");
     }
 
     private List<Recipe> getRecipes() {
