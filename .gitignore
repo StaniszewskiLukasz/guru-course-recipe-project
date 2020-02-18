@@ -80,4 +80,7 @@ out/
 .idea/httpRequests
 
 .target
-
+target/
+/target
+/target/
+*.class
