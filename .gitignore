@@ -78,8 +78,15 @@ out/
 # Editor-based Rest Client
 .idea/httpRequests
 
+target
 .target
 target/
 /target
 /target/
 *.class
+*.jar
+*.war
+*.ear
+*.logs
+.idea/
+.eclipse
