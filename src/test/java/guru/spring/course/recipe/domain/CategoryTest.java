@@ -1,15 +1,15 @@
 package guru.spring.course.recipe.domain;
 
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-17
  * @project recipe
  */
-class CategoryTest {
+public class CategoryTest {
 
     Category category;
 
@@ -19,16 +19,16 @@ class CategoryTest {
     }
 
     @Test
-    void getId() {
+    public void getId() throws Exception {
         Long settingId = 4L;
         category.setId(settingId);
-        assertEquals(settingId, (long) category.getId());
+        assertEquals(settingId, category.getId());
     }
 
     @Test
-    void getDescription() {
+    public void getDescription() throws Exception {
         String desc = "ten opis musi być dokładny";
         category.setDescription(desc);
-        assertEquals(desc,category.getDescription());
+        assertEquals(desc, category.getDescription());
     }
 }
