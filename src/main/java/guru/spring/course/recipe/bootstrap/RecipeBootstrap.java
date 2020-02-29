@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.bootstrap;
 
-import guru.spring.course.recipe.domain.*;
+import guru.spring.course.recipe.dto.*;
 import guru.spring.course.recipe.repositories.CategoryRepository;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;

@@ -1,4 +1,4 @@
-package guru.spring.course.recipe.domain;
+package guru.spring.course.recipe.dto;
 
 import lombok.Data;
 

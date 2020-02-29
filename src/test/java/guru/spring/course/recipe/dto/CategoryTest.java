@@ -1,4 +1,4 @@
-package guru.spring.course.recipe.domain;
+package guru.spring.course.recipe.dto;
 
 import org.junit.Before;
 import org.junit.Test;

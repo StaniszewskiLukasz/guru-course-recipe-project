@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.service;
 
-import guru.spring.course.recipe.domain.Recipe;
+import guru.spring.course.recipe.dto.Recipe;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

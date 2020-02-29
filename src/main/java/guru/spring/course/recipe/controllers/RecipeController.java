@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.controllers;
 
-import guru.spring.course.recipe.domain.Recipe;
+import guru.spring.course.recipe.dto.Recipe;
 import guru.spring.course.recipe.service.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

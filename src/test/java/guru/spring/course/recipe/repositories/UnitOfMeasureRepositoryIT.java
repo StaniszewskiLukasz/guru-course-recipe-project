@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.repositories;
 
-import guru.spring.course.recipe.domain.UnitOfMeasure;
+import guru.spring.course.recipe.dto.UnitOfMeasure;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.service;
 
-import guru.spring.course.recipe.domain.Recipe;
+import guru.spring.course.recipe.dto.Recipe;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
