@@ -23,16 +23,16 @@ class UnitOfMeasureToUnitOfMeasureModelTest {
     }
 
     @Test
-    void testIfObjectIsNull() throws RuntimeException{
-     assertThrows(IllegalArgumentException.class,()->{
-         converter.convert(null);
-     });
+    void testIfObjectIsNull() throws RuntimeException {
+        assertThrows(IllegalArgumentException.class, () -> {
+            converter.convert(null);
+        });
 
     }
 
     @Test
-    void testIfObjectIsEmpty(){
-assertNotNull(converter.convert(new UnitOfMeasure()));
+    void testIfObjectIsEmpty() {
+        assertNotNull(converter.convert(new UnitOfMeasure()));
     }
 
     @Test
@@ -45,7 +45,7 @@ assertNotNull(converter.convert(new UnitOfMeasure()));
         UnitOfMeasureModel measureModel = converter.convert(unitOfMeasure);
         //then
         assertNotNull(measureModel);
-        assertEquals(ID,unitOfMeasure.getId());
-        assertEquals(DESCRIPTION,unitOfMeasure.getDescription());
+        assertEquals(ID, unitOfMeasure.getId());
+        assertEquals(DESCRIPTION, unitOfMeasure.getDescription());
     }
 }
