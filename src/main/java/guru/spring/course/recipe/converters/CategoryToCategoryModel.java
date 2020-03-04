@@ -4,7 +4,6 @@ import guru.spring.course.recipe.dto.Category;
 import guru.spring.course.recipe.models.CategoryModel;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 public class CategoryToCategoryModel implements Converter<Category, CategoryModel> {
 
     @Synchronized
-    @Nullable
     @Override
     public CategoryModel convert(Category category) {
         if(category==null){

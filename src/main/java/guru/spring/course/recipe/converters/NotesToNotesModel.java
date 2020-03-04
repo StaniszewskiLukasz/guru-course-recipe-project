@@ -4,7 +4,6 @@ import guru.spring.course.recipe.dto.Notes;
 import guru.spring.course.recipe.models.NotesModel;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 public class NotesToNotesModel implements Converter<Notes, NotesModel> {
 
     @Synchronized
-    @Nullable
     @Override
     public NotesModel convert(Notes notes) {
         if(notes==null){

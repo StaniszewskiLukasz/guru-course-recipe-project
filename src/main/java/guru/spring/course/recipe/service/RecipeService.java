@@ -1,6 +1,7 @@
 package guru.spring.course.recipe.service;
 
 import guru.spring.course.recipe.dto.Recipe;
+import guru.spring.course.recipe.models.RecipeModel;
 
 import java.util.Set;
 
@@ -12,4 +13,6 @@ public interface RecipeService {
     Set<Recipe> getRecipes();
 
     Recipe getRecipeById(Long id);
+
+    RecipeModel saveRecipeModel(RecipeModel model);
 }

@@ -4,7 +4,6 @@ import guru.spring.course.recipe.dto.UnitOfMeasure;
 import guru.spring.course.recipe.models.UnitOfMeasureModel;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 public class UnitOfMeasureModelToUnitOfMeasure implements Converter<UnitOfMeasureModel, UnitOfMeasure> {
 
     @Synchronized
-    @Nullable
     @Override
     public UnitOfMeasure convert(UnitOfMeasureModel measureModel) {
         if(measureModel==null){

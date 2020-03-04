@@ -4,7 +4,6 @@ import guru.spring.course.recipe.dto.Ingredient;
 import guru.spring.course.recipe.models.IngredientModel;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +20,6 @@ public class IngredientModelToIngredient implements Converter<IngredientModel, I
     }
 
     @Synchronized
-    @Nullable
     @Override
     public Ingredient convert(IngredientModel model) {
         if(model==null){
