@@ -1,10 +1,13 @@
 package guru.spring.course.recipe.controllers;
 
 import guru.spring.course.recipe.dto.Recipe;
+import guru.spring.course.recipe.models.RecipeModel;
 import guru.spring.course.recipe.service.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -21,10 +24,23 @@ public class RecipeController {
     }
 
 
-    @RequestMapping("/recipe/show/{id}")
+    @RequestMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){
         Recipe recipeById = recipeService.getRecipeById(new Long(id));
         model.addAttribute("recipe", recipeById);
         return "recipe/show";
+    }
+
+    @RequestMapping("recipe/new")
+    public String newRecipe(Model model){
+        model.addAttribute("recipe", new RecipeModel());
+        return "recipe/recipeForm";
+    }
+
+    @PostMapping
+    @RequestMapping("recipe")
+    public String saveOrUpdate(@ModelAttribute RecipeModel recipeModel){
+        RecipeModel savedModel = recipeService.saveRecipeModel(recipeModel);
+        return "redirect:/recipe/show/" + savedModel.getId();
     }
 }
