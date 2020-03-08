@@ -15,4 +15,8 @@ public interface RecipeService {
     Recipe getRecipeById(Long id);
 
     RecipeModel saveRecipeModel(RecipeModel model);
+
+    RecipeModel findRecipeModelById(Long id);
+
+    void deleteRecipeById(Long id);
 }

@@ -90,7 +90,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:each="ing : ${recipe.ingredients}" th:text="${ing.amount} +' '+ ${ing.unitOfMeasure.description} +'-'+ ${ing.description}">1 Teaspoon of Sugar</li>
+                                    <li th:each="ing : ${recipe.ingredients}"
+                                        th:text="${(ing.getAmount() +
+                                        ' '+ ing.unitOfMeasure.getDescription() +
+                                        '-'+ ing.getDescription())}">1 Teaspoon of Sugar</li>
                                 </ul>
                             </div>
                         </div>
