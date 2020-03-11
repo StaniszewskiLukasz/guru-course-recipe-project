@@ -21,7 +21,7 @@ public class IngredientController {
 
     @RequestMapping("/recipe/{recipeId}/ingredients")
     public String ingredientsList(@PathVariable String recipeId, Model model) throws Exception{
-        model.addAttribute("recipe",recipeService.findRecipeModelById(Long.valueOf(recipeId)));
+        model.addAttribute("recipe",recipeService.getRecipeById(Long.valueOf(recipeId)));
         return "recipe/ingredient/list";
     }
 }

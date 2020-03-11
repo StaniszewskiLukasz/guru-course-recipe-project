@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.repositories;
 
-import guru.spring.course.recipe.dto.Category;
+import guru.spring.course.recipe.models.CategoryModel;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
@@ -9,8 +9,8 @@ import java.util.Optional;
  * @author Łukasz Staniszewski on 2020-02-13
  * @project recipe
  */
-public interface CategoryRepository extends CrudRepository<Category,Long> {
+public interface CategoryRepository extends CrudRepository<CategoryModel,Long> {
 
-    Optional<Category> findByDescription(String description);
+    Optional<CategoryModel> findByDescription(String description);
 
 }

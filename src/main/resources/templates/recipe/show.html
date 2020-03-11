@@ -17,7 +17,7 @@
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
+<!--/*@thymesVar id="recipe" type="guru/spring/course/recipe/dto/RecipeDto"*/-->
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -35,7 +35,7 @@
                                 <ul>
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
-                                    <li th:each="category : ${recipe.categories}" th:text="${category.getDescription()}">cat three</li>
+                                    <li th:each="categoryModel : ${recipe.categories}" th:text="${categoryModel.getDescription()}">cat three</li>
                                 </ul>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${recipe.difficulty}">Easy</p>
+                                <p th:text="${recipe.difficultyModel}">Easy</p>
                             </div>
                         </div>
                         <div class="row">
@@ -90,7 +90,7 @@
                                 <h1 class="panel-title">Ingredients</h1>
                             </div>
                             <div class="col-md-1">
-                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
+                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredientModels'}" role="button">View</a>
                             </div>
                         </div>
                     </div>
@@ -98,10 +98,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:each="ingredient : ${recipe.ingredients}"
-                                        th:text="${(ingredient.getAmount() +
-                                        ' ' + ingredient.unitOfMeasure.getDescription() +
-                                        ' - ' + ingredient.getDescription())}">1 Teaspoon of Sugar</li>
+                                    <li th:each="ingredients : ${recipe.ingredients}"
+                                        th:text="${(ingredients.getAmount() +
+                                        ' ' + ingredients.unitOfMeasure.getDescription() +
+                                        ' - ' + ingredients.getDescription())}">1 Teaspoon of Sugar</li>
                                 </ul>
                             </div>
                         </div>

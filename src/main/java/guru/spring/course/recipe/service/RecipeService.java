@@ -1,6 +1,6 @@
 package guru.spring.course.recipe.service;
 
-import guru.spring.course.recipe.dto.Recipe;
+import guru.spring.course.recipe.dto.RecipeDto;
 import guru.spring.course.recipe.models.RecipeModel;
 
 import java.util.Set;
@@ -10,11 +10,11 @@ import java.util.Set;
  * @project recipe
  */
 public interface RecipeService {
-    Set<Recipe> getRecipes();
+    Set<RecipeModel> getRecipes();
 
-    Recipe getRecipeById(Long id);
+    RecipeDto getRecipeById(Long id);
 
-    RecipeModel saveRecipeModel(RecipeModel model);
+    RecipeDto saveRecipe(RecipeDto recipe);
 
     RecipeModel findRecipeModelById(Long id);
 

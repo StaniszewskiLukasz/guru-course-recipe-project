@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>guru.spring.course</groupId>
-	<artifactId>recipe</artifactId>
+	<artifactId>recipeModel</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>recipe</name>
+	<name>recipeModel</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>

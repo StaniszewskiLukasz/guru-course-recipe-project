@@ -1,8 +1,8 @@
 package guru.spring.course.recipe.service;
 
-import guru.spring.course.recipe.converters.RecipeModelToRecipe;
-import guru.spring.course.recipe.converters.RecipeToRecipeModel;
-import guru.spring.course.recipe.dto.Recipe;
+import guru.spring.course.recipe.converters.RecipeDtoToRecipeModel;
+import guru.spring.course.recipe.converters.RecipeModelToRecipeDto;
+import guru.spring.course.recipe.dto.RecipeDto;
 import guru.spring.course.recipe.models.RecipeModel;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,40 +22,41 @@ import java.util.Set;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeModelToRecipe recipeModelToRecipe;
-    private final RecipeToRecipeModel recipeToRecipeModel;
+    private final RecipeDtoToRecipeModel recipeDtoToRecipeModel;
+    private final RecipeModelToRecipeDto recipeModelToRecipeDto;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeModelToRecipe recipeModelToRecipe, RecipeToRecipeModel recipeToRecipeModel) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeDtoToRecipeModel recipeDtoToRecipeModel, RecipeModelToRecipeDto recipeModelToRecipeDto) {
         this.recipeRepository = recipeRepository;
-        this.recipeModelToRecipe = recipeModelToRecipe;
-        this.recipeToRecipeModel = recipeToRecipeModel;
+        this.recipeDtoToRecipeModel = recipeDtoToRecipeModel;
+        this.recipeModelToRecipeDto = recipeModelToRecipeDto;
     }
 
     @Override
-    public Set<Recipe> getRecipes() {
-        Set<Recipe> recipes = new HashSet<>();
-        recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
-        return recipes;
+    public Set<RecipeModel> getRecipes() {
+        Set<RecipeModel> recipeModels = new HashSet<>();
+        recipeRepository.findAll().iterator().forEachRemaining(recipeModels::add);
+        return recipeModels;
     }
 
     @Override
-    public Recipe getRecipeById(Long id) {
-        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
-        return optionalRecipe.orElseThrow(() -> new RuntimeException("Recipe object can not be null"));
-    }
-
-    @Override
-    @Transactional
-    public RecipeModel saveRecipeModel(RecipeModel model) {
-        Recipe convert = recipeModelToRecipe.convert(model);
-        Recipe save = recipeRepository.save(convert);
-        return recipeToRecipeModel.convert(save);
+    public RecipeDto getRecipeById(Long id) {
+        Optional<RecipeModel> recipeOptional = recipeRepository.findById(id);
+        RecipeModel model = recipeOptional.orElseThrow(() -> new RuntimeException("Recipe object can not be null"));
+        return recipeModelToRecipeDto.convert(model);
     }
 
     @Override
     @Transactional
+    public RecipeDto saveRecipe(RecipeDto recipe) {
+        RecipeModel model = recipeDtoToRecipeModel.convert(recipe);
+        RecipeModel savedRecipe = recipeRepository.save(model);
+        return recipeModelToRecipeDto.convert(savedRecipe);
+    }
+
+    @Override
     public RecipeModel findRecipeModelById(Long id) {
-        return recipeToRecipeModel.convert(getRecipeById(id));
+        Optional<RecipeModel> model = recipeRepository.findById(id);
+        return model.orElseThrow(()->new RuntimeException("Recipe model was null"));
     }
 
     @Override
