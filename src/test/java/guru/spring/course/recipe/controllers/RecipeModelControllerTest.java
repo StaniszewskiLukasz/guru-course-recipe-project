@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Łukasz Staniszewski on 2020-02-26
  * @project recipe
  */
-class RecipeModelControllerTest {
+class RecipeControllerTest {
 
     @Mock
     RecipeService recipeService;
@@ -53,7 +53,7 @@ class RecipeModelControllerTest {
 
     @Test
     public void testGetNewRecipeForm() throws Exception{
-        RecipeDto model = new RecipeDto();
+        RecipeDto recipeDto = new RecipeDto();
 
 
         mockMvc.perform(get("/recipe/new"))

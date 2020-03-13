@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
  * @author Łukasz Staniszewski on 2020-02-17
  * @project recipe
  */
-public class RecipeModelServiceImplTest {
+public class RecipeServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;

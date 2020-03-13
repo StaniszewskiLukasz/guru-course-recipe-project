@@ -1,8 +1,10 @@
 package guru.spring.course.recipe.controllers;
 
+import guru.spring.course.recipe.dto.IngredientDto;
 import guru.spring.course.recipe.dto.RecipeDto;
+import guru.spring.course.recipe.service.IngredientService;
 import guru.spring.course.recipe.service.RecipeService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,7 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Łukasz Staniszewski on 2020-03-08
  * @project recipe
  */
-class IngredientModelControllerTest {
+class IngredientControllerTest {
+
+    @Mock
+    IngredientService ingredientService;
 
     @Mock
     RecipeService recipeService;
@@ -27,39 +32,43 @@ class IngredientModelControllerTest {
 
     MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new IngredientController(recipeService);
+        controller = new IngredientController(recipeService, ingredientService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     public void testListIngredients() throws Exception {
         //given
-        RecipeDto model = new RecipeDto();
-//        model.setId(1L);
-        when(recipeService.getRecipeById(anyLong())).thenReturn(model);
+        RecipeDto recipe = new RecipeDto();
 
         //when
+        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+
+        //then
         mockMvc.perform(get("recipe/1/ingredients"))
                 .andExpect(model().attributeExists("recipe"))
                 .andExpect(view().name("recipe/ingredient/list"))
                 .andExpect(status().isOk());
-        //then
         verify(recipeService, times(1)).getRecipeById(anyLong());
     }
 
-//    @Test
-//    public void testShowIngredeint() throws Exception{
-//        RecipeDto model = new RecipeDto();
-//        when(recipeService.findRecipeById(anyLong())).thenReturn(model);
-//        //when
-//        mockMvc.perform(get("recipe/1/ingredient/3/show"))
-//                .andExpect(model().attributeExists("recipe"))
-//                .andExpect(view().name("recipe/ingredient/3/show"))
-//                .andExpect(status().isOk());
-//        //then
-//        verify()
-//    }
+    @Test
+    public void testShowIngredient() throws Exception{
+        //given
+        IngredientDto ingredient = new IngredientDto();
+        ingredient.setId(1L);
+
+       //when
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(),anyLong())).thenReturn(ingredient);
+
+        //then
+        mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(view().name("recipe/ingredient/3/show"))
+                .andExpect(status().isOk());
+
+    }
 }
