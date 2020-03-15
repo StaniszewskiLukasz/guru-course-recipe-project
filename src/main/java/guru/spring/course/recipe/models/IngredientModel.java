@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @author Łukasz Staniszewski on 2020-02-11
  * @project recipe
  */
-@Entity(name = "Ingredient")
+@Entity
 @EqualsAndHashCode(exclude = {"recipeModel"})
 @Data
 public class IngredientModel {
@@ -24,7 +24,7 @@ public class IngredientModel {
     @ManyToOne
     private RecipeModel recipeModel;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasureModel unitOfMeasureModel;
 
     public IngredientModel() {

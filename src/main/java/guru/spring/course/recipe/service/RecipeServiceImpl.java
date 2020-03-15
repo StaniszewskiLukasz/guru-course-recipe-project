@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-13
@@ -32,10 +34,22 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Set<RecipeModel> getRecipes() {
-        Set<RecipeModel> recipeModels = new HashSet<>();
-        recipeRepository.findAll().iterator().forEachRemaining(recipeModels::add);
-        return recipeModels;
+    public Set<RecipeDto> getRecipes() {
+        Set<RecipeModel> recipes = new HashSet<>();
+        recipeRepository.findAll()
+                .iterator()
+                .forEachRemaining(recipes::add);
+       return recipes.stream()
+       .filter(Objects::nonNull)
+       .map(recipeModelToRecipeDto::convert)
+       .collect(Collectors.toSet());
+
+    //implementacja tego grubasa
+//        Set<RecipeModel> recipeModelSet = new HashSet<>();
+//        Set<RecipeDto> recipeSet = new HashSet<>();
+//        recipeRepository.findAll().iterator().forEachRemaining(recipeModelSet::add);
+//        recipeModelSet.stream().map(recipeModelToRecipeDto::convert).forEach(recipeSet::add);
+//        return recipeSet;
     }
 
     @Override
@@ -51,12 +65,6 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeModel model = recipeDtoToRecipeModel.convert(recipe);
         RecipeModel savedRecipe = recipeRepository.save(model);
         return recipeModelToRecipeDto.convert(savedRecipe);
-    }
-
-    @Override
-    public RecipeModel findRecipeModelById(Long id) {
-        Optional<RecipeModel> model = recipeRepository.findById(id);
-        return model.orElseThrow(()->new RuntimeException("Recipe model was null"));
     }
 
     @Override

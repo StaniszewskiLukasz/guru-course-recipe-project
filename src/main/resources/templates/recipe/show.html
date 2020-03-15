@@ -90,7 +90,7 @@
                                 <h1 class="panel-title">Ingredients</h1>
                             </div>
                             <div class="col-md-1">
-                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredientModels'}" role="button">View</a>
+                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
                             </div>
                         </div>
                     </div>
@@ -98,10 +98,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:each="ingredients : ${recipe.ingredients}"
-                                        th:text="${(ingredients.getAmount() +
-                                        ' ' + ingredients.unitOfMeasure.getDescription() +
-                                        ' - ' + ingredients.getDescription())}">1 Teaspoon of Sugar</li>
+                                    <li th:each="ingredient : ${recipe.ingredients}"
+                                        th:text="${(ingredient.getAmount() +
+                                        ' ' + ingredient.unitOfMeasure.getDescription() +
+                                        ' - ' + ingredient.getDescription())}">1 Teaspoon of Sugar</li>
                                 </ul>
                             </div>
                         </div>

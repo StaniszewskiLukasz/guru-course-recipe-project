@@ -1,5 +1,6 @@
 package guru.spring.course.recipe.controllers;
 
+import guru.spring.course.recipe.dto.RecipeDto;
 import guru.spring.course.recipe.models.RecipeModel;
 import guru.spring.course.recipe.service.RecipeService;
 import org.junit.Before;
@@ -54,13 +55,13 @@ public class IndexControllerTest {
     @Test
     public void getIndexPage() {
         //given
-        Set<RecipeModel> recipeModels = new HashSet<>();
-        recipeModels.add(new RecipeModel());
-        RecipeModel recipeModel = new RecipeModel();
-        recipeModel.setId(1L);
-        recipeModels.add(recipeModel);
+        Set<RecipeDto> recipes = new HashSet<>();
+        recipes.add(new RecipeDto());
+        RecipeDto recipe = new RecipeDto();
+        recipe.setId(1L);
+        recipes.add(recipe);
 
-        when(recipeService.getRecipes()).thenReturn(recipeModels);
+        when(recipeService.getRecipes()).thenReturn(recipes);
         ArgumentCaptor<Set<RecipeModel>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         //when

@@ -2,7 +2,7 @@ package guru.spring.course.recipe.service;
 
 import guru.spring.course.recipe.converters.RecipeDtoToRecipeModel;
 import guru.spring.course.recipe.converters.RecipeModelToRecipeDto;
-import guru.spring.course.recipe.models.RecipeModel;
+import guru.spring.course.recipe.dto.RecipeDto;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -26,6 +25,7 @@ public class RecipeServiceImplTest {
     RecipeRepository recipeRepository;
     RecipeDtoToRecipeModel recipeDtoToRecipeModel;
     RecipeModelToRecipeDto recipeModelToRecipeDto;
+    @Mock
     RecipeServiceImpl recipeService;
 
     @Before
@@ -37,26 +37,29 @@ public class RecipeServiceImplTest {
 
     @Test
     public void getRecipes() {
-        RecipeModel recipeModel = new RecipeModel();
-        HashSet recipesData = new HashSet();
-        recipesData.add(recipeModel);
-        when(recipeService.getRecipes()).thenReturn(recipesData);
-        Set<RecipeModel> recipeModels = recipeService.getRecipes();
-        assertEquals(recipeModels.size(), 1);
+//        Set<RecipeDto> recipeSet = new HashSet<>();
+//        RecipeDto recipe = new RecipeDto();
+//        recipeSet.add(recipe);
+//        when(recipeService.getRecipes()).thenReturn(recipeSet);
+////        Set<RecipeDto> recipes = recipeService.getRecipes();
+//        assertEquals(recipeService.getRecipes().size(), 1);
+//        verify(recipeRepository, times(1)).findAll();
+//        verify(recipeRepository, never()).findById(anyLong());
+
+        //test tego grubasa
+        RecipeDto recipe = new RecipeDto();
+        HashSet<RecipeDto> receipesData = new HashSet<>();
+        receipesData.add(recipe);
+
+        when(recipeService.getRecipes()).thenReturn(receipesData);
+
+        Set<RecipeDto> recipes = recipeService.getRecipes();
+
+        assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
         verify(recipeRepository, never()).findById(anyLong());
     }
 
-    @Test
-    public void findRecipeModelById() {
-        RecipeModel recipeModel = new RecipeModel();
-        recipeModel.setId(1L);
-        when(recipeRepository.findById(anyLong())).thenReturn(java.util.Optional.of(recipeModel));
-        RecipeModel model = recipeService.findRecipeModelById(1L);
-        assertNotNull("Null recipe returned", model);
-        verify(recipeRepository, times(1)).findById(anyLong());
-        verify(recipeRepository, never()).findAll();
-    }
 
     @Test
     public void deleteRecipe() {

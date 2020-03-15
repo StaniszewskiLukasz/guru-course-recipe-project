@@ -28,28 +28,33 @@ public class RecipeModelToRecipeDto implements Converter<RecipeModel, RecipeDto>
     @Synchronized
     @Override
     public RecipeDto convert(RecipeModel recipeModel) {
-        if(recipeModel == null){
-            throw new IllegalArgumentException("RecipeModel can not be null");
-        }
+//        if(recipeModel == null){
+//            throw new IllegalArgumentException("RecipeModel can not be null");
+//        }
         RecipeDto recipe = new RecipeDto();
         recipe.setId(recipeModel.getId());
         recipe.setCookTime(recipeModel.getCookTime());
         recipe.setDescription(recipeModel.getDescription());
+
         recipe.setDifficultyModel(recipeModel.getDifficultyModel());
         recipe.setDirections(recipeModel.getDirections());
         recipe.setPrepTime(recipeModel.getPrepTime());
+
         recipe.setServings(recipeModel.getServings());
         recipe.setSource(recipeModel.getSource());
         recipe.setUrl(recipeModel.getUrl());
-        if(recipeModel.getNotesModel()!=null){
+
+        if (recipeModel.getNotesModel() != null) {
             recipe.setNotes(notesConverter.convert(recipeModel.getNotesModel()));
         }
-        if(recipeModel.getIngredientModels()!=null&& recipeModel.getIngredientModels().size()>0) {
+
+        if (recipeModel.getIngredientModels() != null && recipeModel.getIngredientModels().size() > 0) {
             recipeModel.getIngredientModels()
                     .forEach(ingredientModel -> recipe
                             .getIngredients().add(ingredientConverter.convert(ingredientModel)));
         }
-        if(recipeModel.getCategories()!=null&& recipeModel.getCategories().size()>0) {
+
+        if (recipeModel.getCategories() != null && recipeModel.getCategories().size() > 0) {
             recipeModel.getCategories()
                     .forEach(categoryModel -> recipe
                             .getCategories()

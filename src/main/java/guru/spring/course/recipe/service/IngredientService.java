@@ -8,6 +8,6 @@ import guru.spring.course.recipe.dto.IngredientDto;
  */
 public interface IngredientService {
 
-    IngredientDto findByRecipeIdAndIngredientId(Long ingredientId, Long recipeId);
+    IngredientDto findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
 
 }

@@ -27,7 +27,7 @@ public class IngredientServiceImpl implements IngredientService {
 
 
     @Override
-    public IngredientDto findByRecipeIdAndIngredientId(Long ingredientId, Long recipeId) {
+    public IngredientDto findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
         Optional<IngredientDto> ingredientDto = null;
         Optional<RecipeModel> recipeModel = recipeRepository.findById(recipeId);
         try {
@@ -42,5 +42,25 @@ public class IngredientServiceImpl implements IngredientService {
             log.error("Ingredient was not found");
         }
         return ingredientDto.get();
+
+//        //implementacja grubasa
+//        Optional<RecipeModel> recipeOptional = recipeRepository.findById(recipeId);
+//
+//        if (!recipeOptional.isPresent()){
+//            //todo impl error handling
+//            log.error("recipe id not found. Id: " + recipeId);
+//        }
+//        RecipeModel recipeModel = recipeOptional.get();
+//
+//        Optional<IngredientDto> ingredientCommandOptional = recipeModel.getIngredientModels().stream()
+//                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+//                .map(converter::convert).findFirst();
+//
+//        if(!ingredientCommandOptional.isPresent()){
+//            //todo impl error handling
+//            log.error("Ingredient id not found: " + ingredientId);
+//        }
+//
+//        return ingredientCommandOptional.get();
     }
 }
