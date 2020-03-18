@@ -10,4 +10,6 @@ public interface IngredientService {
 
     IngredientDto findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
 
+    IngredientDto saveIngredient(IngredientDto ingredientDto);
+
 }

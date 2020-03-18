@@ -4,6 +4,7 @@ import guru.spring.course.recipe.models.UnitOfMeasureModel;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-13
@@ -13,4 +14,9 @@ public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasureMod
 
     Optional<UnitOfMeasureModel> findByDescription(String description);
 
+    @Override
+    Set<UnitOfMeasureModel> findAll();
+
+    @Override
+    Optional<UnitOfMeasureModel> findById(Long aLong);
 }
