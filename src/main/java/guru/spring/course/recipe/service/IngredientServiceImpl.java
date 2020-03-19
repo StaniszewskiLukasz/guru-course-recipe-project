@@ -5,6 +5,7 @@ import guru.spring.course.recipe.converters.IngredientModelToIngredientDto;
 import guru.spring.course.recipe.dto.IngredientDto;
 import guru.spring.course.recipe.models.IngredientModel;
 import guru.spring.course.recipe.models.RecipeModel;
+import guru.spring.course.recipe.repositories.IngredientRepository;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Łukasz Staniszewski on 2020-03-09
@@ -25,12 +27,14 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientModelToIngredientDto modelConverter;
     private final IngredientDtoToIngredientModel dtoConverter;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public IngredientServiceImpl(RecipeRepository recipeRepository, IngredientModelToIngredientDto modelConverter, IngredientDtoToIngredientModel dtoConverter, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public IngredientServiceImpl(RecipeRepository recipeRepository, IngredientModelToIngredientDto modelConverter, IngredientDtoToIngredientModel dtoConverter, UnitOfMeasureRepository unitOfMeasureRepository, IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
         this.modelConverter = modelConverter;
         this.dtoConverter = dtoConverter;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
 
@@ -103,6 +107,20 @@ public class IngredientServiceImpl implements IngredientService {
             //to do check for fail
             return modelConverter.convert(savedIngredientOptional.get());
 
+        }
+    }
+
+    @Override
+    public void deleteIngredientByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
+        Optional<RecipeModel> recipeOptional = recipeRepository.findById(recipeId);
+        if(!recipeOptional.isPresent()){
+            log.info("zrobić obslugę błędów");
+        }else{
+            Set<IngredientModel> ingredientModels = recipeOptional.get().getIngredientModels();
+            Optional<IngredientModel> ingredientmodelToDelete = ingredientModels.stream().filter(e -> e.getId().equals(ingredientId)).findFirst();
+            if(ingredientmodelToDelete.isPresent()){
+               ingredientRepository.deleteById(ingredientId);
+            }
         }
     }
 }

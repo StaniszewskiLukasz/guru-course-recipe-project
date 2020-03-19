@@ -5,6 +5,7 @@ import guru.spring.course.recipe.converters.IngredientModelToIngredientDto;
 import guru.spring.course.recipe.dto.IngredientDto;
 import guru.spring.course.recipe.models.IngredientModel;
 import guru.spring.course.recipe.models.RecipeModel;
+import guru.spring.course.recipe.repositories.IngredientRepository;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -26,6 +27,9 @@ public class IngredientServiceImplTest {
 
     private final IngredientModelToIngredientDto ingredientModelToIngredientDto;
     private final IngredientDtoToIngredientModel ingredientDtoToIngredientModel;
+
+    @Mock
+    IngredientRepository ingredientRepository;
 
     @Mock
     RecipeRepository recipeRepository;
@@ -46,7 +50,7 @@ public class IngredientServiceImplTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         ingredientService = new IngredientServiceImpl(recipeRepository,
-                ingredientModelToIngredientDto,ingredientDtoToIngredientModel, unitOfMeasureRepository);
+                ingredientModelToIngredientDto,ingredientDtoToIngredientModel, unitOfMeasureRepository, ingredientRepository);
     }
 
     @Test
@@ -102,5 +106,22 @@ public class IngredientServiceImplTest {
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any(RecipeModel.class));
 
+    }
+
+    @Test
+    void deleteIngredientByRecipeIdAndIngredientId() {
+        //given
+        RecipeModel recipeModel = new RecipeModel();
+        recipeModel.setId(1L);
+        IngredientModel ingredientModel = new IngredientModel();
+        ingredientModel.setId(2L);
+        recipeModel.addIngredient(ingredientModel);
+        recipeRepository.save(recipeModel);
+        //when
+        ingredientService.deleteIngredientByRecipeIdAndIngredientId(1L,2L);
+        //then
+
+        assertFalse(ingredientRepository.findById(2L).isPresent());
+        assertNull(ingredientService.findByRecipeIdAndIngredientId(1L, 2L));
     }
 }

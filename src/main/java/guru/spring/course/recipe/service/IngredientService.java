@@ -12,4 +12,6 @@ public interface IngredientService {
 
     IngredientDto saveIngredient(IngredientDto ingredientDto);
 
+    void deleteIngredientByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
+
 }
