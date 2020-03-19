@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -116,12 +116,15 @@ public class IngredientServiceImplTest {
         IngredientModel ingredientModel = new IngredientModel();
         ingredientModel.setId(2L);
         recipeModel.addIngredient(ingredientModel);
-        recipeRepository.save(recipeModel);
+        ingredientModel.setRecipeModel(recipeModel);
+        Optional<RecipeModel> optionalRecipeModel = Optional.of(recipeModel);
+//        recipeRepository.save(recipeModel);
+
         //when
+        when(recipeRepository.findById(1L)).thenReturn(optionalRecipeModel);
         ingredientService.deleteIngredientByRecipeIdAndIngredientId(1L,2L);
         //then
-
-        assertFalse(ingredientRepository.findById(2L).isPresent());
-        assertNull(ingredientService.findByRecipeIdAndIngredientId(1L, 2L));
+        verify(recipeRepository,times(1)).findById(anyLong());
+        verify(recipeRepository,times(1)).save(any(RecipeModel.class));
     }
 }
