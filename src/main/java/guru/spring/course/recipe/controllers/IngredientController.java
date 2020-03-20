@@ -25,57 +25,57 @@ public class IngredientController {
     private final UnitOfMeasureService unitOfMeasureService;
 
     public IngredientController(RecipeService recipeService, IngredientService ingredientService, UnitOfMeasureService unitOfMeasureService) {
-        this.recipeService=recipeService;
+        this.recipeService = recipeService;
         this.ingredientService = ingredientService;
         this.unitOfMeasureService = unitOfMeasureService;
     }
 
     @RequestMapping("/recipe/{recipeId}/ingredients")
-    public String ingredientsList(@PathVariable String recipeId, Model model){
-        model.addAttribute("recipe",recipeService.getRecipeById(Long.valueOf(recipeId)));
+    public String ingredientsList(@PathVariable String recipeId, Model model) {
+        model.addAttribute("recipe", recipeService.getRecipeById(Long.valueOf(recipeId)));
         return "recipe/ingredient/list";
     }
 
     @RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/show")
     public String showRecipeIngredient(@PathVariable String recipeId,
-                                 @PathVariable String ingredientId,
-                                 Model model){
+                                       @PathVariable String ingredientId,
+                                       Model model) {
         model.addAttribute("ingredient",
                 ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId)
-                        ,Long.valueOf(ingredientId)));
+                        , Long.valueOf(ingredientId)));
         return "recipe/ingredient/show";
     }
 
     @RequestMapping("/recipe/{recipeId}/ingredient/new")
-    public String newIngredientForm(@PathVariable String recipeId, Model model){
+    public String newIngredientForm(@PathVariable String recipeId, Model model) {
         RecipeDto recipeById = recipeService.getRecipeById(Long.valueOf(recipeId));
         IngredientDto ingredientDto = new IngredientDto();
         ingredientDto.setRecipeId(Long.valueOf(recipeId));
-        model.addAttribute("ingredient",ingredientDto);
+        model.addAttribute("ingredient", ingredientDto);
         ingredientDto.setUnitOfMeasure(new UnitOfMeasureDto());
-        model.addAttribute("unitOfMeasureList",unitOfMeasureService.listAllUnitsOfMeasure());
-                return "recipe/ingredient/ingredientForm";
+        model.addAttribute("unitOfMeasureList", unitOfMeasureService.listAllUnitsOfMeasure());
+        return "recipe/ingredient/ingredientForm";
     }
 
     @RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId,
                                          @PathVariable String ingredientId,
-                                         Model model){
+                                         Model model) {
         model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId),
                 Long.valueOf(ingredientId)));
-        model.addAttribute("unitOfMeasureList",unitOfMeasureService.listAllUnitsOfMeasure());
+        model.addAttribute("unitOfMeasureList", unitOfMeasureService.listAllUnitsOfMeasure());
         return "recipe/ingredient/ingredientForm";
     }
 
     @RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
     public String deleteRecipeIngredient(@PathVariable String recipeId,
-                                         @PathVariable String ingredientId){
-ingredientService.deleteIngredientByRecipeIdAndIngredientId(Long.valueOf(recipeId),Long.valueOf(ingredientId));
-        return "recipe/ingredient/ingredientForm";
+                                         @PathVariable String ingredientId) {
+        ingredientService.deleteIngredientByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId));
+        return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 
     @PostMapping("/recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientDto ingredientDto){
+    public String saveOrUpdate(@ModelAttribute IngredientDto ingredientDto) {
         IngredientDto savedIngredient = ingredientService.saveIngredient(ingredientDto);
         return "redirect:/recipe/" + savedIngredient.getRecipeId() + "/ingredient/" + savedIngredient.getId() + "/show";
     }
