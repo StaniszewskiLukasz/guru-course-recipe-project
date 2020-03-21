@@ -35,8 +35,15 @@
                                 <ul>
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
-                                    <li th:each="categoryModel : ${recipe.categories}" th:text="${categoryModel.getDescription()}">cat three</li>
+                                    <li th:each="categoryModel : ${recipe.categories}"
+                                        th:text="${categoryModel.getDescription()}">cat three</li>
                                 </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <img src="../../static/images/guacamole400x400WithX.jpg"
+                                th:src="@{/images/guacamole400x400WithX.jpg}"
+                                width="200"
+                                height="200">
                             </div>
                         </div>
                         <div class="row">
