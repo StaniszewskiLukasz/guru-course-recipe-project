@@ -27,11 +27,14 @@ public class RecipeModelToRecipeDto implements Converter<RecipeModel, RecipeDto>
 
     @Synchronized
     @Override
+//    @Nullable
     public RecipeDto convert(RecipeModel recipeModel) {
-//        if(recipeModel == null){
-//            throw new IllegalArgumentException("RecipeModel can not be null");
-//        }
-        RecipeDto recipe = new RecipeDto();
+
+        if(recipeModel == null){
+            throw new IllegalArgumentException("RecipeModel can not be null");
+//            return null;
+        }
+        final RecipeDto recipe = new RecipeDto();
         recipe.setId(recipeModel.getId());
         recipe.setCookTime(recipeModel.getCookTime());
         recipe.setDescription(recipeModel.getDescription());

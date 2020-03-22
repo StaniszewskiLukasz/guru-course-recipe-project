@@ -15,9 +15,12 @@ public class UnitOfMeasureDtoToUnitOfMeasureModel implements Converter<UnitOfMea
 
     @Synchronized
     @Override
+//    @Nullable
     public UnitOfMeasureModel convert(UnitOfMeasureDto measureModel) {
-        if(measureModel==null){
+
+        if (measureModel == null) {
             throw new RuntimeException("Unit Of Measure doesn't exist");
+//            return null;
         }
         final UnitOfMeasureModel unitOfMeasureModel = new UnitOfMeasureModel();
         unitOfMeasureModel.setId(measureModel.getId());

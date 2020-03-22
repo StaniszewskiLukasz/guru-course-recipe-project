@@ -14,13 +14,16 @@ import org.springframework.stereotype.Component;
 public class UnitOfMeasureModelToUnitOfMeasureDto implements Converter<UnitOfMeasureModel, UnitOfMeasureDto> {
 
     @Synchronized
+//    @Nullable
     @Override
     public UnitOfMeasureDto convert(UnitOfMeasureModel unitOfMeasureModel) {
-        if(unitOfMeasureModel ==null){
+
+        if (unitOfMeasureModel == null) {
             throw new IllegalArgumentException("unit of measure is null");
+//            return null;
         }
 
-        UnitOfMeasureDto measureModel = new UnitOfMeasureDto();
+        final UnitOfMeasureDto measureModel = new UnitOfMeasureDto();
         measureModel.setId(unitOfMeasureModel.getId());
         measureModel.setDescription(unitOfMeasureModel.getDescription());
         return measureModel;

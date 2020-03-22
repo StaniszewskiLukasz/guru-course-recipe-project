@@ -5,7 +5,6 @@ import guru.spring.course.recipe.converters.IngredientModelToIngredientDto;
 import guru.spring.course.recipe.dto.IngredientDto;
 import guru.spring.course.recipe.models.IngredientModel;
 import guru.spring.course.recipe.models.RecipeModel;
-import guru.spring.course.recipe.repositories.IngredientRepository;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +25,15 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientModelToIngredientDto modelConverter;
     private final IngredientDtoToIngredientModel dtoConverter;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
-    private final IngredientRepository ingredientRepository;
 
-    public IngredientServiceImpl(RecipeRepository recipeRepository, IngredientModelToIngredientDto modelConverter, IngredientDtoToIngredientModel dtoConverter, UnitOfMeasureRepository unitOfMeasureRepository, IngredientRepository ingredientRepository) {
+    public IngredientServiceImpl(RecipeRepository recipeRepository,
+                                 IngredientModelToIngredientDto modelConverter,
+                                 IngredientDtoToIngredientModel dtoConverter,
+                                 UnitOfMeasureRepository unitOfMeasureRepository) {
         this.recipeRepository = recipeRepository;
         this.modelConverter = modelConverter;
         this.dtoConverter = dtoConverter;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
-        this.ingredientRepository = ingredientRepository;
     }
 
 

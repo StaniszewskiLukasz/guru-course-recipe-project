@@ -16,8 +16,9 @@ public class NotesModelToNotesDto implements Converter<NotesModel, NotesDto> {
     @Synchronized
     @Override
     public NotesDto convert(NotesModel notesModel) {
-        if(notesModel==null){
-throw new IllegalArgumentException("NotesModel can not be null");
+
+        if (notesModel == null) {
+            throw new IllegalArgumentException("NotesModel can not be null");
         }
         NotesDto note = new NotesDto();
         note.setId(notesModel.getId());

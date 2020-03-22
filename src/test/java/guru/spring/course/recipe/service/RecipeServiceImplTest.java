@@ -3,14 +3,15 @@ package guru.spring.course.recipe.service;
 import guru.spring.course.recipe.converters.RecipeDtoToRecipeModel;
 import guru.spring.course.recipe.converters.RecipeModelToRecipeDto;
 import guru.spring.course.recipe.dto.RecipeDto;
+import guru.spring.course.recipe.models.RecipeModel;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -48,12 +49,15 @@ public class RecipeServiceImplTest {
 
         //test tego grubasa
         RecipeDto recipe = new RecipeDto();
-        HashSet<RecipeDto> receipesData = new HashSet<>();
+        List<RecipeDto> receipesData = new ArrayList<>();
         receipesData.add(recipe);
+        RecipeModel recipeModel = new RecipeModel();
+        recipeModel.setId(1L);
+        recipeRepository.save(recipeModel);
 
         when(recipeService.getRecipes()).thenReturn(receipesData);
 
-        Set<RecipeDto> recipes = recipeService.getRecipes();
+        List<RecipeDto> recipes = recipeService.getRecipes();
 
         assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();

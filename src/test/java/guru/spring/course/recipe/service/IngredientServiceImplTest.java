@@ -5,7 +5,6 @@ import guru.spring.course.recipe.converters.IngredientModelToIngredientDto;
 import guru.spring.course.recipe.dto.IngredientDto;
 import guru.spring.course.recipe.models.IngredientModel;
 import guru.spring.course.recipe.models.RecipeModel;
-import guru.spring.course.recipe.repositories.IngredientRepository;
 import guru.spring.course.recipe.repositories.RecipeRepository;
 import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +24,11 @@ import static org.mockito.Mockito.*;
  */
 public class IngredientServiceImplTest {
 
+    //    @BeforeAll
+//    public void firstSetUp() {
     private final IngredientModelToIngredientDto ingredientModelToIngredientDto;
     private final IngredientDtoToIngredientModel ingredientDtoToIngredientModel;
-
-    @Mock
-    IngredientRepository ingredientRepository;
+//    }
 
     @Mock
     RecipeRepository recipeRepository;
@@ -38,6 +37,10 @@ public class IngredientServiceImplTest {
     UnitOfMeasureRepository unitOfMeasureRepository;
 
     IngredientService ingredientService;
+
+//    @Mock
+//    IngredientRepository ingredientRepository;
+
 
     IngredientServiceImplTest(IngredientModelToIngredientDto ingredientModelToIngredientDto,
                               IngredientDtoToIngredientModel ingredientDtoToIngredientModel) {
@@ -48,9 +51,11 @@ public class IngredientServiceImplTest {
 
     @BeforeEach
     public void setUp() {
+//        ingredientDtoToIngredientModel=new IngredientDtoToIngredientModel(new UnitOfMeasureDtoToUnitOfMeasureModel());
+//        ingredientModelToIngredientDto= new IngredientModelToIngredientDto(new UnitOfMeasureModelToUnitOfMeasureDto());
         MockitoAnnotations.initMocks(this);
         ingredientService = new IngredientServiceImpl(recipeRepository,
-                ingredientModelToIngredientDto,ingredientDtoToIngredientModel, unitOfMeasureRepository, ingredientRepository);
+                ingredientModelToIngredientDto, ingredientDtoToIngredientModel, unitOfMeasureRepository);
     }
 
     @Test
@@ -122,9 +127,9 @@ public class IngredientServiceImplTest {
 
         //when
         when(recipeRepository.findById(1L)).thenReturn(optionalRecipeModel);
-        ingredientService.deleteIngredientByRecipeIdAndIngredientId(1L,2L);
+        ingredientService.deleteIngredientByRecipeIdAndIngredientId(1L, 2L);
         //then
-        verify(recipeRepository,times(1)).findById(anyLong());
-        verify(recipeRepository,times(1)).save(any(RecipeModel.class));
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(RecipeModel.class));
     }
 }

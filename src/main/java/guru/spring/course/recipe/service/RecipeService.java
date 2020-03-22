@@ -2,14 +2,14 @@ package guru.spring.course.recipe.service;
 
 import guru.spring.course.recipe.dto.RecipeDto;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-13
  * @project recipe
  */
 public interface RecipeService {
-    Set<RecipeDto> getRecipes();
+    List<RecipeDto> getRecipes();
 
     RecipeDto getRecipeById(Long id);
 

@@ -9,10 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -34,22 +32,18 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Set<RecipeDto> getRecipes() {
-        Set<RecipeModel> recipes = new HashSet<>();
-        recipeRepository.findAll()
-                .iterator()
-                .forEachRemaining(recipes::add);
-       return recipes.stream()
-       .filter(Objects::nonNull)
-       .map(recipeModelToRecipeDto::convert)
-       .collect(Collectors.toSet());
-
-    //implementacja tego grubasa
-//        Set<RecipeModel> recipeModelSet = new HashSet<>();
-//        Set<RecipeDto> recipeSet = new HashSet<>();
-//        recipeRepository.findAll().iterator().forEachRemaining(recipeModelSet::add);
-//        recipeModelSet.stream().map(recipeModelToRecipeDto::convert).forEach(recipeSet::add);
-//        return recipeSet;
+    @Transactional
+    public List<RecipeDto> getRecipes() {
+        List<RecipeModel> recipeModels = recipeRepository.findAll();
+        return recipeModels.stream().map(recipeModelToRecipeDto::convert).collect(Collectors.toList());
+//        Set<RecipeModel> recipes = new HashSet<>();
+//        recipeRepository.findAll()
+//                .iterator()
+//                .forEachRemaining(recipes::add);
+//        Set<RecipeDto> collect = recipes.stream()
+//                .map(recipeModelToRecipeDto::convert)
+//                .collect(Collectors.toSet());
+//        return collect;
     }
 
     @Override

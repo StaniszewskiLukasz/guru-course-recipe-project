@@ -26,10 +26,13 @@ public class RecipeDtoToRecipeModel implements Converter<RecipeDto, RecipeModel>
     }
 
     @Synchronized
+//    @Nullable
     @Override
     public RecipeModel convert(RecipeDto recipeDto) {
+
         if (recipeDto == null) {
             throw new IllegalArgumentException("RecipeModel can not be null");
+//            return null;
         }
         RecipeModel recipeModel = new RecipeModel();
         recipeModel.setId(recipeDto.getId());
@@ -41,7 +44,7 @@ public class RecipeDtoToRecipeModel implements Converter<RecipeDto, RecipeModel>
         recipeModel.setServings(recipeDto.getServings());
         recipeModel.setSource(recipeDto.getSource());
         recipeModel.setUrl(recipeDto.getUrl());
-        if(recipeDto.getNotes() != null){
+        if (recipeDto.getNotes() != null) {
             recipeModel.setNotesModel(notesConverter.convert(recipeDto.getNotes()));
         }
         if (recipeDto.getIngredients() != null && recipeDto.getIngredients().size() > 0) {

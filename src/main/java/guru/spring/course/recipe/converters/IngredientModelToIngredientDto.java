@@ -20,16 +20,22 @@ public class IngredientModelToIngredientDto implements Converter<IngredientModel
     }
 
     @Synchronized
+//    @Nullable
     @Override
     public IngredientDto convert(IngredientModel ingredientModel) {
 
+        if(ingredientModel==null){
+//            return null;
+            throw new IllegalArgumentException("IngredientModel is null");
+        }
+
         IngredientDto ingredientDto = new IngredientDto();
         ingredientDto.setId(ingredientModel.getId());
-        ingredientDto.setDescription(ingredientModel.getDescription());
         if(ingredientModel.getRecipeModel()!=null){
             ingredientDto.setRecipeId(ingredientModel.getRecipeModel().getId());
         }
         ingredientDto.setAmount(ingredientModel.getAmount());
+        ingredientDto.setDescription(ingredientModel.getDescription());
         if(ingredientModel.getUnitOfMeasureModel()!=null){
             ingredientDto.setUnitOfMeasure(measureModel.convert(ingredientModel.getUnitOfMeasureModel()));
         }
