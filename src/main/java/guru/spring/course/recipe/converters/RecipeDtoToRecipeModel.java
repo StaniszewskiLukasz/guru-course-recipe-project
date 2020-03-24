@@ -44,6 +44,7 @@ public class RecipeDtoToRecipeModel implements Converter<RecipeDto, RecipeModel>
         recipeModel.setServings(recipeDto.getServings());
         recipeModel.setSource(recipeDto.getSource());
         recipeModel.setUrl(recipeDto.getUrl());
+        recipeModel.setImage(recipeDto.getImage());
         if (recipeDto.getNotes() != null) {
             recipeModel.setNotesModel(notesConverter.convert(recipeDto.getNotes()));
         }
