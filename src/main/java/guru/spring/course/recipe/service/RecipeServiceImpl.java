@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-13
@@ -22,49 +22,54 @@ import java.util.stream.Collectors;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeDtoToRecipeModel recipeDtoToRecipeModel;
-    private final RecipeModelToRecipeDto recipeModelToRecipeDto;
+    private final RecipeDtoToRecipeModel dtoConverter;
+    private final RecipeModelToRecipeDto modelConverter;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeDtoToRecipeModel recipeDtoToRecipeModel, RecipeModelToRecipeDto recipeModelToRecipeDto) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeDtoToRecipeModel dtoConverter, RecipeModelToRecipeDto modelConverter) {
         this.recipeRepository = recipeRepository;
-        this.recipeDtoToRecipeModel = recipeDtoToRecipeModel;
-        this.recipeModelToRecipeDto = recipeModelToRecipeDto;
+        this.dtoConverter = dtoConverter;
+        this.modelConverter = modelConverter;
+    }
+
+    @Override
+    public Set<RecipeModel> getRecipes() {
+        log.debug("I'm in the service");
+
+        Set<RecipeModel> recipeSet = new HashSet<>();
+        recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
+        return recipeSet;
+    }
+
+    @Override
+    public RecipeModel findById(Long l) {
+
+        Optional<RecipeModel> recipeOptional = recipeRepository.findById(l);
+
+        if (!recipeOptional.isPresent()) {
+            throw new RuntimeException("Recipe Not Found!");
+        }
+
+        return recipeOptional.get();
     }
 
     @Override
     @Transactional
-    public List<RecipeDto> getRecipes() {
-        List<RecipeModel> recipeModels = recipeRepository.findAll();
-        return recipeModels.stream().map(recipeModelToRecipeDto::convert).collect(Collectors.toList());
-//        Set<RecipeModel> recipes = new HashSet<>();
-//        recipeRepository.findAll()
-//                .iterator()
-//                .forEachRemaining(recipes::add);
-//        Set<RecipeDto> collect = recipes.stream()
-//                .map(recipeModelToRecipeDto::convert)
-//                .collect(Collectors.toSet());
-//        return collect;
-    }
-
-    @Override
-    public RecipeDto getRecipeById(Long id) {
-        Optional<RecipeModel> recipeOptional = recipeRepository.findById(id);
-        RecipeModel model = recipeOptional.orElseThrow(() -> new RuntimeException("Recipe object can not be null"));
-        return recipeModelToRecipeDto.convert(model);
+    public RecipeDto findCommandById(Long l) {
+        return modelConverter.convert(findById(l));
     }
 
     @Override
     @Transactional
-    public RecipeDto saveRecipe(RecipeDto recipe) {
-        RecipeModel model = recipeDtoToRecipeModel.convert(recipe);
-        RecipeModel savedRecipe = recipeRepository.save(model);
-        return recipeModelToRecipeDto.convert(savedRecipe);
+    public RecipeDto saveRecipeCommand(RecipeDto command) {
+        RecipeModel detachedRecipe = dtoConverter.convert(command);
+
+        RecipeModel savedRecipe = recipeRepository.save(detachedRecipe);
+        log.debug("Saved RecipeId:" + savedRecipe.getId());
+        return modelConverter.convert(savedRecipe);
     }
 
     @Override
-    public void deleteRecipeById(Long id) {
-        recipeRepository.deleteById(id);
+    public void deleteById(Long idToDelete) {
+        recipeRepository.deleteById(idToDelete);
     }
-
-
 }

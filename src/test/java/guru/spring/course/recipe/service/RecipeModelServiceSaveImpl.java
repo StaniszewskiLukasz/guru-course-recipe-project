@@ -47,7 +47,7 @@ public class RecipeModelServiceSaveImpl {
 
         //when
         testRecipeDto.setDescription(NEW_DESCRIPTION);
-        RecipeDto recipe = recipeService.saveRecipe(testRecipeDto);
+        RecipeDto recipe = recipeService.saveRecipeCommand(testRecipeDto);
 
         //then
         assertEquals(NEW_DESCRIPTION, recipe.getDescription());

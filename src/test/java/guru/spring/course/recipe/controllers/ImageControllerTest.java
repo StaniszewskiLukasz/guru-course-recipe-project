@@ -1,53 +1,101 @@
 package guru.spring.course.recipe.controllers;
 
 import guru.spring.course.recipe.dto.RecipeDto;
+import guru.spring.course.recipe.service.ImageService;
 import guru.spring.course.recipe.service.RecipeService;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.swing.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class ImageControllerTest {
 
     @Mock
+    ImageService imageService;
+
+    @Mock
     RecipeService recipeService;
+
+    ImageController controller;
 
     MockMvc mockMvc;
 
     @Before
-    void setUp(){
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+
+        controller = new ImageController(imageService, recipeService);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
-    void renderImageFromDB() throws Exception {
-        RecipeDto recipe = new RecipeDto();
-        recipe.setId(1L);
-        String text = "fake image text";
-        Byte[] bytes = new Byte[text.getBytes().length];
-        int i =0;
-        for (Byte b : text.getBytes()) {
-            bytes[i++] = b;
+    public void getImageForm() throws Exception {
+        //given
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+
+        when(recipeService.findCommandById(anyLong())).thenReturn(recipeDto);
+
+        //when
+        mockMvc.perform(get("/recipe/1/image"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"));
+
+        verify(recipeService, times(1)).findCommandById(anyLong());
+
+    }
+
+    @Test
+    public void handleImagePost() throws Exception {
+        MockMultipartFile multipartFile =
+                new MockMultipartFile("imagefile", "testing.txt", "text/plain",
+                        "Spring Framework Guru".getBytes());
+
+        mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/recipe/1/show"));
+
+        verify(imageService, times(1)).saveImageFile(anyLong(), any());
+    }
+
+
+    @Test
+    public void renderImageFromDB() throws Exception {
+
+        //given
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+
+        String s = "fake image text";
+        Byte[] bytesBoxed = new Byte[s.getBytes().length];
+
+        int i = 0;
+
+        for (byte primByte : s.getBytes()){
+            bytesBoxed[i++] = primByte;
         }
-        recipe.setImage(bytes);
 
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        recipeDto.setImage(bytesBoxed);
 
-        MockHttpServletResponse response = mockMvc.perform(get("recipe/1/recipeimage"))
+        when(recipeService.findCommandById(anyLong())).thenReturn(recipeDto);
+
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
-        byte[] contentAsByteArray = response.getContentAsByteArray();
-        assertEquals(text.getBytes().length,contentAsByteArray.length);
+        byte[] reponseBytes = response.getContentAsByteArray();
+
+        assertEquals(s.getBytes().length, reponseBytes.length);
     }
 }

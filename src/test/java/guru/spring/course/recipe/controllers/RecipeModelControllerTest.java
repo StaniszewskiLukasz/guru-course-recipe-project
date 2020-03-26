@@ -43,7 +43,7 @@ class RecipeControllerTest {
         recipe.setId(1L);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        when(recipeService.findCommandById(anyLong())).thenReturn(recipe);
 
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())
@@ -69,7 +69,7 @@ class RecipeControllerTest {
         model.setId(3L);
         model.setDescription("TestowyOpis");
 
-        when(recipeService.saveRecipe(any())).thenReturn(model);
+        when(recipeService.saveRecipeCommand(any())).thenReturn(model);
 
         mockMvc.perform(post("/recipe")
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -84,7 +84,7 @@ class RecipeControllerTest {
         RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
 
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        when(recipeService.findCommandById(anyLong())).thenReturn(recipe);
 
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
-        verify(recipeService,times(1)).deleteRecipeById(anyLong());
+        verify(recipeService,times(1)).deleteById(anyLong());
     }
 
 }

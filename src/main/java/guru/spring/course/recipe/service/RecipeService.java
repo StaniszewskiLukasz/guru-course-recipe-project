@@ -1,19 +1,23 @@
 package guru.spring.course.recipe.service;
 
 import guru.spring.course.recipe.dto.RecipeDto;
+import guru.spring.course.recipe.models.RecipeModel;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Łukasz Staniszewski on 2020-02-13
  * @project recipe
  */
 public interface RecipeService {
-    List<RecipeDto> getRecipes();
+    Set<RecipeModel> getRecipes();
 
-    RecipeDto getRecipeById(Long id);
+    RecipeModel findById(Long id);
 
-    RecipeDto saveRecipe(RecipeDto recipe);
+    RecipeDto findCommandById(Long id);
 
-    void deleteRecipeById(Long id);
+    RecipeDto saveRecipeCommand(RecipeDto recipeDto);
+
+    void deleteById(Long idToDelete);
 }

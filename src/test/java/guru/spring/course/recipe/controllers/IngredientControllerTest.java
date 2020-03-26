@@ -1,27 +1,28 @@
 package guru.spring.course.recipe.controllers;
 
+import guru.spring.course.recipe.converters.IngredientDtoToIngredientModel;
+import guru.spring.course.recipe.converters.IngredientModelToIngredientDto;
+import guru.spring.course.recipe.converters.UnitOfMeasureDtoToUnitOfMeasureModel;
+import guru.spring.course.recipe.converters.UnitOfMeasureModelToUnitOfMeasureDto;
 import guru.spring.course.recipe.dto.IngredientDto;
-import guru.spring.course.recipe.dto.RecipeDto;
-import guru.spring.course.recipe.dto.UnitOfMeasureDto;
+import guru.spring.course.recipe.models.IngredientModel;
+import guru.spring.course.recipe.models.RecipeModel;
+import guru.spring.course.recipe.repositories.RecipeRepository;
+import guru.spring.course.recipe.repositories.UnitOfMeasureRepository;
 import guru.spring.course.recipe.service.IngredientService;
-import guru.spring.course.recipe.service.RecipeService;
-import guru.spring.course.recipe.service.UnitOfMeasureService;
+import guru.spring.course.recipe.service.IngredientServiceImpl;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * @author Łukasz Staniszewski on 2020-03-08
@@ -29,121 +30,111 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class IngredientControllerTest {
 
+    private final IngredientModelToIngredientDto ingredientModelConverter;
+    private final IngredientDtoToIngredientModel ingredientDtoConverter;
+
     @Mock
+    RecipeRepository recipeRepository;
+
+    @Mock
+    UnitOfMeasureRepository unitOfMeasureRepository;
+
     IngredientService ingredientService;
 
-    @Mock
-    RecipeService recipeService;
-
-    @Mock
-    UnitOfMeasureService unitOfMeasureService;
-
-    IngredientController controller;
-
-    MockMvc mockMvc;
+    public IngredientControllerTest() {
+        this.ingredientModelConverter = new IngredientModelToIngredientDto(new UnitOfMeasureModelToUnitOfMeasureDto());
+        this.ingredientDtoConverter = new IngredientDtoToIngredientModel(new UnitOfMeasureDtoToUnitOfMeasureModel());
+    }
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        ingredientService = new IngredientServiceImpl(ingredientModelConverter,
+                ingredientDtoConverter,
+                recipeRepository,
+                unitOfMeasureRepository);
     }
 
     @Test
-    public void testListIngredients() throws Exception {
-        //given
-        RecipeDto recipe = new RecipeDto();
+    public void findByRecipeIdAndId() throws Exception {
+    }
 
-        //when
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+    @Test
+    public void findByRecipeIdAndReceipeIdHappyPath() throws Exception {
+        //given
+        RecipeModel recipe = new RecipeModel();
+        recipe.setId(1L);
+
+        IngredientModel ingredient1 = new IngredientModel();
+        ingredient1.setId(1L);
+
+        IngredientModel ingredient2 = new IngredientModel();
+        ingredient2.setId(1L);
+
+        IngredientModel ingredient3 = new IngredientModel();
+        ingredient3.setId(3L);
+
+        recipe.addIngredient(ingredient1);
+        recipe.addIngredient(ingredient2);
+        recipe.addIngredient(ingredient3);
+        Optional<RecipeModel> recipeOptional = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 
         //then
-        mockMvc.perform(get("recipe/1/ingredients"))
-                .andExpect(model().attributeExists("recipe"))
-                .andExpect(view().name("recipe/ingredient/list"))
-                .andExpect(status().isOk());
-        verify(recipeService, times(1)).getRecipeById(anyLong());
-    }
-
-    @Test
-    public void showIngredientTest() throws Exception {
-        //given
-        IngredientDto ingredient = new IngredientDto();
-        ingredient.setId(1L);
+        IngredientDto ingredientDto = ingredientService.findByRecipeIdAndIngredientId(1L, 3L);
 
         //when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredient);
+        assertEquals(Long.valueOf(3L), ingredientDto.getId());
+        assertEquals(Long.valueOf(1L), ingredientDto.getRecipeId());
+        verify(recipeRepository, times(1)).findById(anyLong());
+    }
+
+
+    @Test
+    public void testSaveRecipeCommand() throws Exception {
+        //given
+        IngredientDto command = new IngredientDto();
+        command.setId(3L);
+        command.setRecipeId(2L);
+
+        Optional<RecipeModel> recipeOptional = Optional.of(new RecipeModel());
+
+        RecipeModel savedRecipe = new RecipeModel();
+        savedRecipe.addIngredient(new IngredientModel());
+        savedRecipe.getIngredientModels().iterator().next().setId(3L);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.save(any())).thenReturn(savedRecipe);
+
+        //when
+        IngredientDto savedCommand = ingredientService.saveIngredientDto(command);
 
         //then
-        mockMvc.perform(get("/recipe/1/ingredient/1/show"))
-                .andExpect(model().attributeExists("ingredient"))
-                .andExpect(view().name("recipe/ingredient/1/show"))
-                .andExpect(status().isOk());
+        assertEquals(Long.valueOf(3L), savedCommand.getId());
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(RecipeModel.class));
+
     }
 
     @Test
-    void newIngredientFormTest() throws Exception {
+    public void testDeleteById() throws Exception {
         //given
-        RecipeDto recipeDto = new RecipeDto();
-        recipeDto.setId(1L);
+        RecipeModel recipe = new RecipeModel();
+        IngredientModel ingredient = new IngredientModel();
+        ingredient.setId(3L);
+        recipe.addIngredient(ingredient);
+        ingredient.setRecipeModel(recipe);
+        Optional<RecipeModel> recipeOptional = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
         //when
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipeDto);
+        ingredientService.deleteIngredientByRecipeIdAndIngredientId(1L, 3L);
+
         //then
-        mockMvc.perform(get("/recipe/1/ingredient/new"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("ingredient"))
-                .andExpect(model().attributeExists("unitList"))
-                .andExpect(view().name("recipe/ingredient/ingredientForm"));
-
-        verify(recipeService, times(1)).getRecipeById(anyLong());
-    }
-
-    @Test
-    void updateRecipeIngredientTest() throws Exception {
-        //given
-        IngredientDto ingredient = new IngredientDto();
-        ingredient.setId(1L);
-        UnitOfMeasureDto unit1 = new UnitOfMeasureDto();
-        unit1.setId(1L);
-        UnitOfMeasureDto unit2 = new UnitOfMeasureDto();
-        unit2.setId(2L);
-        Set<UnitOfMeasureDto> unitSet = new HashSet<>();
-        unitSet.add(unit1);
-        unitSet.add(unit2);
-        //when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredient);
-        when(unitOfMeasureService.listAllUnitsOfMeasure()).thenReturn(unitSet);
-        //then
-        mockMvc.perform(get("/recipe/1/ingredient/1/update"))
-                .andExpect(view().name("recipe/ingredient/ingredientForm"))
-                .andExpect(model().attributeExists("ingredient", "unitOfMeasureList"))
-                .andExpect(status().isOk());
-
-    }
-
-    @Test
-    void saveOrUpdate() throws Exception {
-        //given
-        IngredientDto ingredient = new IngredientDto();
-        ingredient.setId(1L);
-        ingredient.setRecipeId(1L);
-        //when
-        when(ingredientService.saveIngredient(any())).thenReturn(ingredient);
-        //then
-        mockMvc.perform(post("/recipe/1/ingredient")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("id", "")
-                .param("description", "some string")
-        )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/1/ingredient/1/show"));
-    }
-
-    @Test
-    void deleteRecipeIngredient() throws Exception {
-        //when
-        mockMvc.perform(get("/recipe/1/ingredient/2/delete"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/1/ingredients"));
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(RecipeModel.class));
     }
 }

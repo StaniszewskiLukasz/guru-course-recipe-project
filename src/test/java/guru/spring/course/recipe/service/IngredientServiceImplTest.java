@@ -51,11 +51,11 @@ public class IngredientServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-//        ingredientDtoToIngredientModel=new IngredientDtoToIngredientModel(new UnitOfMeasureDtoToUnitOfMeasureModel());
-//        ingredientModelToIngredientDto= new IngredientModelToIngredientDto(new UnitOfMeasureModelToUnitOfMeasureDto());
         MockitoAnnotations.initMocks(this);
-        ingredientService = new IngredientServiceImpl(recipeRepository,
-                ingredientModelToIngredientDto, ingredientDtoToIngredientModel, unitOfMeasureRepository);
+        ingredientService = new IngredientServiceImpl(ingredientModelToIngredientDto,
+                ingredientDtoToIngredientModel,
+                recipeRepository,
+                unitOfMeasureRepository);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class IngredientServiceImplTest {
         when(recipeRepository.save(any())).thenReturn(savedRecipe);
 
         //when
-        IngredientDto savedCommand = ingredientService.saveIngredient(command);
+        IngredientDto savedCommand = ingredientService.saveIngredientDto(command);
 
         //then
         assertEquals(Long.valueOf(3L), savedCommand.getId());
